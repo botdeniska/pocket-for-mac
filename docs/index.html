@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pocket for Mac</title>
+  <meta name="description" content="Пульт для Mac в iPhone: трекпад, клавиатура, медиа, файлы и экран Mac по локальной сети. Скачайте помощник Pocket for Mac Helper.">
+  <link rel="icon" href="icon.png">
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <header class="hero">
+      <img src="icon.png" width="96" height="96" alt="">
+      <h1>Pocket for Mac</h1>
+      <p class="lead">Пульт для Mac в iPhone: трекпад и клавиатура, медиа и громкость, приложения и окна,
+        файлы, буфер обмена и экран Mac с управлением касаниями. iPhone и Mac связываются напрямую по
+        вашей сети — без облака и аккаунтов.</p>
+    </header>
+
+    <section class="download" aria-labelledby="download-title">
+      <h2 id="download-title">Pocket for Mac Helper</h2>
+      <p>Помощник для Mac, без которого приложение на iPhone не может управлять компьютером.
+        Живёт в строке меню. Нужна macOS 14 или новее.</p>
+      <p id="download-ready">
+        <a class="button" href="https://github.com/botdeniska/pocket-for-mac/releases/latest/download/Pocket-for-Mac-Helper.dmg">Скачать для Mac</a>
+      </p>
+      <p id="download-version" class="note" hidden></p>
+      <p id="download-pending" class="note" hidden>Помощник готовится к выпуску и скоро появится на этой странице.</p>
+      <p class="note">Приложение для iPhone — «Pocket for Mac», нужна iOS 17 или новее.</p>
+    </section>
+
+    <section aria-labelledby="start-title">
+      <h2 id="start-title">Как начать</h2>
+      <ol class="steps">
+        <li>
+          <h3>Установите помощник</h3>
+          <p>Откройте скачанный файл и перетащите Pocket for Mac Helper в папку «Программы». Запустите
+            его: значок появится в строке меню вверху экрана, и откроется окно «Начало работы».</p>
+        </li>
+        <li>
+          <h3>Включите службу</h3>
+          <p>Нажмите «Установить службу» и подтвердите в Системных настройках (понадобятся права
+            администратора). Служба принимает подключения iPhone, в том числе когда Mac заблокирован.</p>
+        </li>
+        <li>
+          <h3>Дайте разрешения</h3>
+          <p>«Универсальный доступ» — чтобы iPhone двигал курсор и нажимал клавиши. «Запись экрана» —
+            только для вкладки «Экран». Кнопки для обоих — в окне «Начало работы».</p>
+        </li>
+        <li>
+          <h3>Привяжите iPhone</h3>
+          <p>Нажмите «Добавить iPhone…» — на Mac появится QR-код. В Pocket for Mac на iPhone нажмите
+            «Сканировать QR-код», наведите камеру на код и нажмите на Mac «Разрешить».</p>
+        </li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="trouble-title">
+      <h2 id="trouble-title">Если iPhone не находит Mac</h2>
+      <ul>
+        <li>iPhone и Mac должны быть в одной сети Wi-Fi. В гостевых и общественных сетях устройства часто
+          не видят друг друга.</li>
+        <li>Pocket for Mac нужен доступ к локальной сети: Настройки iPhone → Pocket for Mac → «Локальная
+          сеть».</li>
+        <li>Помощник должен быть запущен, а служба — работать: значок в строке меню Mac → «Настройки…».</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="privacy-title">
+      <h2 id="privacy-title">Конфиденциальность</h2>
+      <p>Pocket for Mac не собирает и не передаёт разработчику никаких данных. Связь — напрямую между
+        iPhone и вашим Mac, по зашифрованному каналу. <a href="privacy.html">Политика конфиденциальности</a></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Вопросы и ошибки — <a href="https://github.com/botdeniska/pocket-for-mac/issues">в разделе Issues проекта</a>.</p>
+    <p class="note">Mac, iPhone и macOS — товарные знаки Apple Inc. Pocket for Mac не связан с Apple.</p>
+  </footer>
+
+  <script>
+    // The helper is an asset of the latest GitHub release. Until there is one, say so instead of
+    // a dead link; if GitHub does not answer (rate limit, offline), keep the button as it is.
+    fetch("https://api.github.com/repos/botdeniska/pocket-for-mac/releases/latest", {
+      headers: { Accept: "application/vnd.github+json" }
+    })
+      .then(function (response) {
+        if (response.status === 404) { throw "none"; }
+        if (!response.ok) { throw "unknown"; }
+        return response.json();
+      })
+      .then(function (release) {
+        var assets = release.assets || [];
+        var dmg = assets.filter(function (a) { return a.name === "Pocket-for-Mac-Helper.dmg"; })[0];
+        if (!dmg) { throw "none"; }
+        var version = document.getElementById("download-version");
+        version.textContent = "Версия " + String(release.tag_name).replace(/^v/, "");
+        version.hidden = false;
+      })
+      .catch(function (reason) {
+        if (reason !== "none") { return; }
+        document.getElementById("download-ready").hidden = true;
+        document.getElementById("download-pending").hidden = false;
+      });
+  </script>
+</body>
+</html>
